@@ -49,6 +49,12 @@ std::vector<double> secondDerivative(std::vector<measurment> measurments) {
 
 }
 
+/** Returns the mean of the given values
+ */
+double average(std::vector<double> values) {
+
+}
+
 /** Returns the average accleeration (in m/s^2) over a period 
  * The second derivative funcion above should be used
  */
