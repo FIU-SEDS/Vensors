@@ -1,24 +1,12 @@
-/**
- * Example code which turns on an LED on a given pin when a button is pressed
+/** Returns the value in mm of the bottom sensor
  */
-
-const int buttonPin = 4;
-const int ledPin =  5;
-
-int buttonState = 0;
-
-void setup() {
-  Serial.begin(115200);
-  pinMode(buttonPin, INPUT);
-  pinMode(ledPin, OUTPUT);
+int readBottomSensor() {
+  // Returns a random value for the time being
+  return -1;
 }
 
-void loop() {
-  buttonState = digitalRead(buttonPin);
-  Serial.println(buttonState);
-  if (buttonState == HIGH) {
-    digitalWrite(ledPin, HIGH);
-  } else {
-    digitalWrite(ledPin, LOW);
-  }
+/** Returns the value in mm of the top sensor
+ */
+int readTopSensor() {
+  return -1;
 }
