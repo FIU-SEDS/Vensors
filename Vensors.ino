@@ -3,6 +3,27 @@
 #include <cmath>
 
 
+// magneto motor pins (s). default pin number
+  static int motorPin=0001;
+  static int magPinFirstRight=00;
+  static int magPinSecRight=01;
+  static const int intial_ACCEL=0;
+ // function for right pillar movement
+ void startRightPillars()
+ {
+    analogWrite(motorPin,MIN_EXPECTED_ACCEL);
+    digitalWrite(magPinFirstRight,MIN_EXPECTED_ACCEL);
+    digitalWrite(magPinSecRight,MIN_EXPECTED_ACCEL);
+ }
+ void stopRightPillar()
+ {
+    analogWrite(motorPin,intial_ACCEL);
+    digitalWrite(magPinFirstRight,intial_ACCEL);
+    digitalWrite(magPinSecRight,intial_ACCEL);
+ }
+ //function for left pillar movement
+ void startLeftPillars(){}
+ void stopLeftPillars(){}
 struct measurment {
   /** Distance in mm from the sensor */
   double distance;
@@ -53,7 +74,33 @@ void setup() {
 }
 
 void loop() {
-  // Do nothing
+  //track distance and time
+  bool movingRight=true;
+  uint64_t timeI=0;
+  uint64_t timeII;
+  
+  /* start movement towards the right*/
+  if(movingRight)
+  {
+    if(timeI==0){
+    timeI=millis();
+    startRightPillars();
+    }
+    //time taken
+    timeII=millis()-timeI;
+    //converts it to seconds
+    double duration_time= timeII/1000.0;
+    //distance formula 1/2a(t)^2
+    int raiseToThePowTwo=2;
+    double distance= 0.5 * MIN_EXPECTED_ACCEL*pow(duration_time,raiseToThePowTwo);
+    if(distance >=(MAX_TRAVEL_DISTANCE-MAX_DIST))
+    {
+      stopRightPillar();
+      movingRight=false;
+    }
+    //decceleration statement can go here
+
+  }
     Serial.println(MAX_EXPECTED_MEASURMENTS);
     delay(500);
 }
