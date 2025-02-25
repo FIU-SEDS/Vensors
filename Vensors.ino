@@ -53,7 +53,34 @@ void setup() {
 }
 
 void loop() {
-  // Do nothing
+  // accelerating to the right ensuring distance is greater than 40
+  double readLeft=readLeftSensor();
+  double readRight=readRightSensor();
+  //intial acceleration
+  rightFacingForce();
+  delay(MEASURE_INTERVAL);
+
+    while(readLeft > MAX_DIST)
+    {
+      rightFacingForce();
+      uint64_t currTime=uint64_t(micros())*1000; //gets time in nanoseconds
+       readLeft= readLeftSensor();  //read from left sensor
+       readRight=readRightSensor(); // read data from right sensor
+       leftMeasurments.push_back({readLeft,currTime}); // reads data into left sensor
+       rightMeasurments.push_back({readRight,currTime});
+       delay(MEASURE_INTERVAL);
+    }
+    //deceleration loop
+    while(readRight > MAX_DIST)
+    {
+      leftFacingForce();
+      uint64_t currTime=uint64_t(micros())*1000; //gets time in nanoseconds
+       readLeft= readLeftSensor();  //read from left sensor
+       readRight=readRightSensor(); // read data from right sensor
+       rightMeasurments.push_back({readRight,currTime});
+       leftMeasurments.push_back({readLeft,currTime});
+       delay(MEASURE_INTERVAL);
+    }
     Serial.println(MAX_EXPECTED_MEASURMENTS);
     delay(500);
 }
