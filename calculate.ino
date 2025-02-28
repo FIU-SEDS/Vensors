@@ -46,7 +46,29 @@ std::vector<measurment> testingRightMeasurments = {
  * secondDerivative(measurments) -> { 0.566996 * 10^-9}
  */ 
 std::vector<double> secondDerivative(std::vector<measurment> measurments) {
-
+    std::vector <double> result;
+  if (measurements.size() < 3){
+      return result;
+  }
+  
+  for(size_t i = 1; i < measurements.size() - 1; ++i){
+    double f_xh = measurements[i - 1].distance;
+    double f_x = measurements[i].distance;
+    double f_xmh = measurements[i + 1].distance;
+  
+    uint64_t t_xh = measurements[i - 1].time;
+    uint64_t t_x = measurements[i].time;
+    uint64_t t_xmh = measurements[i + 1].time;
+  
+      
+  
+      double h_squared = std::pow(static_cast<double>(t_xmh - t_xh) / 2.0, 2);
+      double SecondDeriv = (f_xh - 2 * f_x + f_xmh) / h_squared;
+      result.push_back(SecondDeriv);
+  
+  }
+  
+    return result;
 }
 
 /** Returns the mean of the given values
