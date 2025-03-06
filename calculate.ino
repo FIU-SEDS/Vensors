@@ -1,4 +1,5 @@
 #include <vector>
+#include <numeric>  // For std::accumulate
 
 // Some randomly generated calculations for testing
 std::vector<measurment> testingLeftMeasurments = {
@@ -71,15 +72,24 @@ std::vector<double> secondDerivative(std::vector<measurment> measurments) {
     return result;
 }
 
-/** Returns the mean of the given values
- */
-double average(std::vector<double> values) {
 
+
+/** Returns the mean of the given values */
+double average(const std::vector<double>& values) {
+    if (values.empty()) return 0.0; // Avoid division by zero
+    return std::accumulate(values.begin(), values.end(), 0.0) / values.size();
 }
 
-/** Returns the average accleeration (in m/s^2) over a period 
- * The second derivative funcion above should be used
+/** Returns the average acceleration (in m/s²) over a period
+ * The second derivative function above should be used
  */
-double averageAcceleration(std::vector<measurment> measurments) {
+double averageAcceleration(const std::vector<measurment>& measurments) {
+    std::vector<double> second_derivatives = secondDerivative(measurments);
+    double avg_second_derivative = average(second_derivatives);
 
+    // Convert from mm/ns² to m/s²
+    // 1 mm = 10^-3 m, 1 ns² = (10^-9 s)² = 10^-18 s²
+    // Therefore, mm/ns² = (10^-3 m) / (10^-18 s²) = 10^15 m/s²
+    return avg_second_derivative * 1e15;
 }
+
