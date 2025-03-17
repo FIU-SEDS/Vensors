@@ -1,10 +1,27 @@
+#include <Wire.h>
+#include "SparkFun_VL53L1X.h"
 /**
  * Returns the distance measured by the left sensor in mm
  */
+// create objects for right and left sensor;
+SFEVL53L1X right_sensor, left_sensor;
 int getLDistanceSensor()
 {
   // Simulate reading from a sensor
-  return -1;
+  // initiate measurement
+  left_sensor.startRanging();
+  while (!left_sensor.checkForDataReady())
+  {
+    delay(1);
+  }
+  // result of the measurement from the sensor
+  int distance = left_sensor.getDistance();
+  // clears any interrupts
+  left_sensor.clearInterrupt();
+  // stops measuring distance
+  left_sensor.stopRanging();
+  // returns left sensor distance
+  return distance;
 }
 
 /**
@@ -13,7 +30,22 @@ int getLDistanceSensor()
 int getRDistanceSensor()
 {
   // Simulate reading from a sensor
-  return -1;
+  // starts measuring
+  // initiate measurement
+  right_sensor.startRanging();
+  // wait for data to be ready
+  while (!right_sensor.checkForDataReady())
+  {
+    delay(1);
+  }
+  // result of the measurement from the sensor
+  int distance = right_sensor.getDistance();
+  // clear any interrupt
+  right_sensor.clearInterrupt();
+  // stops measuring the distance
+  right_sensor.stopRanging();
+  // returns right sensor distance
+  return distance;
 }
 
 /**
@@ -22,4 +54,20 @@ int getRDistanceSensor()
  */
 int setupTimeOfFlight()
 {
+  // i2c communitcation
+  Wire.begin();
+  Serial.begin(115200);
+  // begin return 0 if the intialization is good
+  if (left_sensor.begin() != 0)
+  {
+    Serial.println("Left_sensor failed to begin.");
+    return 1;
+  }
+  if (right_sensor.begin() != 0)
+  {
+    Serial.println("Right sensor failed to begin.");
+    return 2;
+  }
+  Serial.println("Sensor working!");
+  return 0;
 }
