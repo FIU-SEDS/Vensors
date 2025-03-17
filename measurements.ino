@@ -1,7 +1,40 @@
+#include <cmath>
 #include <vector>
+
+/** The maximum distance that the carrige can move between the top in bottom
+ * portions in mm
+ */
+const int MAX_TRAVEL_DISTANCE = 200;
+
+/** When the distance from the sensor to the carrige is less than or equal to this value
+ * The carrige will begin decellerating and eventually come to a stop
+ */
+const int MAX_DIST = 40;
+
+/** The maximum distance in which the carrige will experience a constant force
+ */
+constexpr int MAX_DIST_CONSTANT_FORCE = MAX_TRAVEL_DISTANCE - MAX_DIST;
+
+/** Interval in ms when the sensors will measure values
+ */
+constexpr int MEASURE_INTERVAL = 100;
+
+/** The minimum expected acceleration in m/s to happen when a constant force is applied to the carrige
+ * This is used to reserve space in the measurments array
+ * If this value is incorrect tis no biggie
+ */
+constexpr double MIN_EXPECTED_ACCEL = 0.05;
+
+constexpr int MAX_EXPECTED_MEASUREMENTS = static_cast<int>(std::sqrt((2 * MAX_DIST_CONSTANT_FORCE) / MIN_EXPECTED_ACCEL));
 
 std::vector<measurment> leftMeasurements;
 std::vector<measurment> rightMeasurements;
+
+void setupMeasurements()
+{
+  leftMeasurements.reserve(MAX_EXPECTED_MEASUREMENTS);
+  rightMeasurements.reserve(MAX_EXPECTED_MEASUREMENTS);
+}
 
 std::vector<measurment> *getLeftMeasurements
 {
