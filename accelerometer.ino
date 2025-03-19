@@ -1,28 +1,32 @@
-/**
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_ADXL345_U.h>
+ /**
  * Returns the acceleration from the Accelerometer in the X direction
  */
 int getXAcc()
 {
-  // Simulate reading from a sensor
-  return -1;
+  sensors_event_t event;
+  accel.getEvent(&event);
+  return (int)event.acceleration.x;
 }
-
 /**
  * Returns the acceleration from the Accelerometer in the Y direction
  */
 int getAccY()
 {
-  // Simulate reading from a sensor
-  return -1;
+  sensors_event_t event;
+  accel.getEvent(&event);
+  return (int)event.acceleration.y;
 }
-
 /**
  * Returns the acceleration from Accelerometer in the in the Z direction
  */
 int getAccZ()
 {
-  // Simulate reading from a sensor
-  return -1;
+  sensors_event_t event;
+  accel.getEvent(&event);
+  return (int)event.acceleration.z;
 }
 
 /**
@@ -31,4 +35,11 @@ int getAccZ()
  */
 int setupAccelerometer()
 {
+  if(!accel.begin()){
+    return -1;
+  }
+  return 0;
 }
+
+}
+
