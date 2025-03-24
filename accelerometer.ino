@@ -1,32 +1,45 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_ADXL345_U.h>
+
+const int ACCELEROMETER_SENSOR_ID = 12345;
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(ACCELEROMETER_SENSOR_ID);
+
+sensors_event_t event;
+
+double updateAcc() {
+  accel.getEvent(&event);
+}
+
 /**
  * Returns the acceleration from the Accelerometer in the X direction
  */
-int getXAcc()
+float getXAcc()
 {
-  sensors_event_t event;
-  accel.getEvent(&event);
-  return (int)event.acceleration.x;
+  return event.acceleration.x;
 }
+
 /**
  * Returns the acceleration from the Accelerometer in the Y direction
  */
-int getAccY()
+float getAccY()
 {
-  sensors_event_t event;
-  accel.getEvent(&event);
-  return (int)event.acceleration.y;
+  return event.acceleration.y;
 }
+
 /**
  * Returns the acceleration from Accelerometer in the in the Z direction
  */
-int getAccZ()
+float getAccZ()
 {
-  sensors_event_t event;
-  accel.getEvent(&event);
-  return (int)event.acceleration.z;
+  return event.acceleration.z;
+}
+
+/**
+ * Calculates the magnitude of the acceleration vector.
+ */
+float getAccelerationMagnitude() {
+  return sqrt(getXAcc() * getXAcc() + getAccY() * getAccY() + getAccZ() * getAccZ());
 }
 
 /**
@@ -39,5 +52,7 @@ int setupAccelerometer()
   {
     return -1;
   }
+
+  accel.setRange(ADXL345_RANGE_16_G);
   return 0;
 }

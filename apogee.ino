@@ -2,15 +2,25 @@
  * Functions and constants related to checking if the device is currently in apogee
  */
 
-/** Threshold around the value zero for the IMU acliremote to consider the
- * device in apogee
+/**
+ * Threshold for the IMU to consider the device starting apogee
  */
-const double IMU_Z_THRESH = 0.05;
+const double STARTING_IMU_THRESH = 0.20;
 
-/** Threshold around the value zero for the Accelerometer acliremote to consider the
+/** Threshold for the IMU to consider the device ending apogee
  * device in apogee
  */
-const double ACCELO_Z_THRESH = 0.05;
+const double ENDING_IMU_THRESH = -0.5;
+
+/**
+ * Threshold for the IMU to consider the device starting apogee
+ */
+const double STARTING_ACC_THRESH = 0.20;
+
+/** Threshold for the IMU to consider the device ending apogee
+ * device in apogee
+ */
+const double ENDING_ACC_THRESH = -0.5;
 
 /**
  * Is the IMU in apogee
@@ -20,7 +30,9 @@ const double ACCELO_Z_THRESH = 0.05;
  */
 bool isIMUApogee()
 {
-  return false;
+  float totalAccMag = getIMUAccelerationMagnitude();
+
+  return totalAccMag < STARTING_IMU_THRESH && totalAccMag > ENDING_IMU_THRESH;
 }
 
 /**
@@ -31,10 +43,14 @@ bool isIMUApogee()
  */
 bool isAcceloAppoge()
 {
-  return false;
+  updateAcc();
+
+  float totalAccMag = getAccelerationMagnitude();
+
+  return totalAccMag < STARTING_ACC_THRESH && totalAccMag > ENDING_ACC_THRESH;
 }
 
 bool isInApogee()
 {
-  return isInApogee() && isAcceloAppoge();
+  return isAcceloAppoge() && isIMUApogee();
 }

@@ -1,3 +1,5 @@
+#include <math.h> // Include the math library
+
 /**
  * Returns the acceleration from the IMU in the X direction
  */
@@ -67,4 +69,19 @@ int getIMUZTemp()
  */
 int setupIMU()
 {
+  return 0;
+}
+
+/**
+ * Calculates the magnitude of the acceleration vector.
+ *
+ * @return The magnitude of the acceleration vector.
+ */
+float getIMUAccelerationMagnitude() {
+  int x = getIMUXAcc();
+  int y = getIMUYAcc();
+  int z = getIMUZAcc();
+
+  // Calculate the magnitude using the Pythagorean theorem: sqrt(x^2 + y^2 + z^2)
+  return sqrt(x * x + y * y + z * z);
 }
