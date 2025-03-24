@@ -93,3 +93,10 @@ bool isInCenter(int leftSensorReading, int rightSensorReading)
          (rightSensorReading >= RIGHT_SENSOR_CENTER - CENTER_BUFFER &&
           rightSensorReading <= RIGHT_SENSOR_CENTER + CENTER_BUFFER);
 }
+
+bool isInCenter() {
+  int left = getLDistanceSensor();
+  int right = getLDistanceSensor();
+
+  return isInCenter(left, right);
+}

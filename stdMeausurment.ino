@@ -2,11 +2,6 @@
  * File containing code for the standard way of measurement
  */
 
-/**
- * Setup code for the standard measurement setup
- *
- * Call the fullSetup function and only proceed if the setup succeeded
- */
 
 /**
  * Setup code for the standard measurement setup
@@ -22,6 +17,7 @@ void stdMeasSetup()
  */
 void stdMeasLoop()
 {
+
   double readLeft = getLDistanceSensor();
   double readRight = getRDistanceSensor();
   // intial acceleration

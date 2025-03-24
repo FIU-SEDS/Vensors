@@ -41,7 +41,7 @@ std::vector<measurment> *getLeftMeasurements()
   return leftMeasurements;
 }
 
-std::vector<measurment> *getLeftMeasurements()
+std::vector<measurment> *getRightMeasurements()
 {
   return rightMeasurements;
 }
@@ -54,6 +54,21 @@ void addLeftMeas(double distance, uint64_t time)
 void addRightMeas(double distance, uint64_t time)
 {
   rightMeasurements.push_back({distance, time});
+}
+
+void recordLeftMeas()
+{
+  leftMeasurements.push_back({getLDistanceSensor(), micros()});
+}
+
+void recordRightMeas()
+{
+  right.push_back({getRDistanceSensor(), micros()});
+}
+
+void recordMeas() {
+  recordLeftMeas();
+  recordRightMeas();
 }
 
 void clearBothMeas()
@@ -70,4 +85,24 @@ double getLeftAvg()
 double getRightAvg()
 {
   return averageAcceleration(rightMeasurements);
+}
+
+
+/**
+ * Calculates the acceleration using the data
+ * from both sensors and then clears out the measurements
+ */
+void calculateMass() {
+  double leftAvg = getLeftAvg();
+  double rightAvg = getRightAvg();
+
+  Serial.print("Left avg: ");
+  Serial.print(leftAvg);
+
+  Serial.print(",");
+
+  Serial.print("Right avg: ");
+  Serial.print(rightAvg);
+
+  clearBothMeas();
 }

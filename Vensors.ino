@@ -19,8 +19,15 @@ const int MAX_TRAVEL_DISTANCE = 200;
 void setup()
 {
   Serial.begin(115200);
+
+  stdMeasSetup();
 }
 
 void loop()
 {
+  if (!isInApogee()) {
+    return;
+  }
+
+  stdMeasLoop();
 }
