@@ -14,6 +14,8 @@ int oscSetup()
 /**
  * Loop the oscillation algorithm
  *
+ * Check if the z acceleration is above the threshold value
+ *
  * Starting from the left
  * Push the carrige to the right until `bool isInCenter(int leftSensorReading, int rightSensorReading)` returns true
  *
@@ -31,6 +33,9 @@ int oscSetup()
  *
  * Durring a full oscillation the values should be recorded in a measurements list
  * using the functions from the `measurements.ino` file
+ *
+ * Before clearing calculate the acceleration from the given arrays
+ * Using the getLeftAvg, and getRightAvg functions
  *
  */
 void oscLoop()

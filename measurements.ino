@@ -36,12 +36,12 @@ void setupMeasurements()
   rightMeasurements.reserve(MAX_EXPECTED_MEASUREMENTS);
 }
 
-std::vector<measurment> *getLeftMeasurements
+std::vector<measurment> *getLeftMeasurements()
 {
   return leftMeasurements;
 }
 
-std::vector<measurment> *getLeftMeasurements
+std::vector<measurment> *getLeftMeasurements()
 {
   return rightMeasurements;
 }
@@ -60,4 +60,14 @@ void clearBothMeas()
 {
   leftMeasurements.clear();
   rightMeasurements.clear();
+}
+
+double getLeftAvg()
+{
+  return averageAcceleration(leftMeasurements);
+}
+
+double getRightAvg()
+{
+  return averageAcceleration(rightMeasurements);
 }
