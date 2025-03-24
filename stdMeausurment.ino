@@ -7,8 +7,14 @@
  *
  * Call the fullSetup function and only proceed if the setup succeeded
  */
+
+/**
+ * Setup code for the standard measurement setup
+ */
 void stdMeasSetup()
 {
+  //calls full setup method
+  fullSetup();
 }
 
 /**
@@ -23,7 +29,6 @@ void stdMeasLoop()
   delay(MEASURE_INTERVAL);
 
   while (readLeft > MAX_DIST)
-
   {
     rightFacingForce();
     uint64_t currTime = uint64_t(micros()) * 1000;   // gets time in nanoseconds
