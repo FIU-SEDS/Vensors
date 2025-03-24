@@ -2,51 +2,25 @@
 #include "main.h"
 #include <cmath>
 
-/**
- * File containing code for the standard way of measurement
- */
-
-/**
- * Setup code for the standard measurement setup
- */
-void stdMeasSetup()
+struct measurment
 {
-  //calls full setup method
-  fullSetup();
+  /** Distance in mm from the sensor */
+  double distance;
+
+  /** Time in Nano seconds since the microcontroller started */
+  uint64_t time;
+};
+
+/** The maximum distance that the carrige can move between the top in bottom
+ * portions in mm
+ */
+const int MAX_TRAVEL_DISTANCE = 200;
+
+void setup()
+{
+  Serial.begin(115200);
 }
 
-/**
- * Loop code for the standard measurement loop
- */
-void stdMeasLoop()
+void loop()
 {
-  double readLeft = getLDistanceSensor();
-  double readRight = getRDistanceSensor();
-  // intial acceleration
-  rightFacingForce();
-  delay(MEASURE_INTERVAL);
-
-  while (readLeft > MAX_DIST)
-  {
-    rightFacingForce();
-    uint64_t currTime = uint64_t(micros()) * 1000;   // gets time in nanoseconds
-    readLeft = getLDistanceSensor();                 // read from left sensor
-    readRight = getRDistanceSensor();                // read data from right sensor
-    leftMeasurments.push_back({readLeft, currTime}); // reads data into left sensor
-    rightMeasurments.push_back({readRight, currTime});
-    delay(MEASURE_INTERVAL);
-  }
-  // deceleration loop
-  while (readRight > MAX_DIST)
-  {
-    leftFacingForce();
-    uint64_t currTime = uint64_t(micros()) * 1000; // gets time in nanoseconds
-    readLeft = getLDistanceSensor();               // read from left sensor
-    readRight = getRDistanceSensor();              // read data from right sensor
-    rightMeasurments.push_back({readRight, currTime});
-    leftMeasurments.push_back({readLeft, currTime});
-    delay(MEASURE_INTERVAL);
-  }
-  Serial.println(MAX_EXPECTED_MEASURMENTS);
-  delay(500);
 }

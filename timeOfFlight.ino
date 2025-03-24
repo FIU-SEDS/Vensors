@@ -1,5 +1,14 @@
 #include <Wire.h>
 #include "SparkFun_VL53L1X.h"
+
+/**
+ * The buffer in the values in where the sensors will say that the carrige is located in the center
+ */
+const int CENTER_BUFFER = 4;
+
+const int LEFT_SENSOR_CENTER = 90;
+const int RIGHT_SENSOR_CENTER = 110;
+
 /**
  * Returns the distance measured by the left sensor in mm
  */
@@ -70,4 +79,17 @@ int setupTimeOfFlight()
   }
   Serial.println("Sensor working!");
   return 0;
+}
+
+/**
+ * Checks if the carriage is near the center based on sensor readings.
+ *
+ * @return True if the carriage is centered, false otherwise.
+ */
+bool isInCenter(int leftSensorReading, int rightSensorReading)
+{
+  return (leftSensorReading >= LEFT_SENSOR_CENTER - CENTER_BUFFER &&
+          leftSensorReading <= LEFT_SENSOR_CENTER + CENTER_BUFFER) &&
+         (rightSensorReading >= RIGHT_SENSOR_CENTER - CENTER_BUFFER &&
+          rightSensorReading <= RIGHT_SENSOR_CENTER + CENTER_BUFFER);
 }

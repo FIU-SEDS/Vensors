@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_ADXL345_U.h>
- /**
+/**
  * Returns the acceleration from the Accelerometer in the X direction
  */
 int getXAcc()
@@ -35,11 +35,9 @@ int getAccZ()
  */
 int setupAccelerometer()
 {
-  if(!accel.begin()){
+  if (!accel.begin())
+  {
     return -1;
   }
   return 0;
 }
-
-}
-
