@@ -52,7 +52,7 @@ void oscLoop()
     }
 
     if (firstOscillation) {
-      firstOscillation = !firstOscillation
+      firstOscillation = !firstOscillation;
     }
 
     return;
@@ -67,6 +67,4 @@ void oscLoop()
   {
     rightFacingForce();
   }
-
-  addLeftMeas()
 }

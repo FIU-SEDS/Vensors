@@ -19,29 +19,26 @@ void fullSetup()
   int code = 0;
 
   code = setupTimeOfFlight();
-  if (!code)
+  if (code)
   {
     Serial.print("Failed to setup time of flight sensor, code: ");
     Serial.println(code);
-    return;
+    while(1) {}
   }
 
+  return;
+
   code = setupIMU();
-  if (!code) {
+  if (code) {
     Serial.print("Failed to setup time of IMU sensor, code: ");
     Serial.println(code);
-    return;
+    while(1) {}
   }
 
   code = setupAccelerometer();
-  if (!code) {
-    return;
+  if (code) {
+    while(1) {}
   }
 
   setupMeasurements();
-
-  while (1) {
-    delay(1000);
-    Serial.print(" ");
-  }
 }

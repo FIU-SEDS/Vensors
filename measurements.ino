@@ -38,12 +38,12 @@ void setupMeasurements()
 
 std::vector<measurment> *getLeftMeasurements()
 {
-  return leftMeasurements;
+  return &leftMeasurements;
 }
 
 std::vector<measurment> *getRightMeasurements()
 {
-  return rightMeasurements;
+  return &rightMeasurements;
 }
 
 void addLeftMeas(double distance, uint64_t time)
@@ -63,7 +63,7 @@ void recordLeftMeas()
 
 void recordRightMeas()
 {
-  right.push_back({getRDistanceSensor(), micros()});
+  rightMeasurements.push_back({getRDistanceSensor(), micros()});
 }
 
 void recordMeas() {

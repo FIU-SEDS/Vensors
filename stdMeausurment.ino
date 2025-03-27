@@ -8,8 +8,6 @@
  */
 void stdMeasSetup()
 {
-  //calls full setup method
-  fullSetup();
 }
 
 /**
@@ -30,8 +28,9 @@ void stdMeasLoop()
     uint64_t currTime = uint64_t(micros()) * 1000;   // gets time in nanoseconds
     readLeft = getLDistanceSensor();                 // read from left sensor
     readRight = getRDistanceSensor();                // read data from right sensor
-    leftMeasurments.push_back({readLeft, currTime}); // reads data into left sensor
-    rightMeasurments.push_back({readRight, currTime});
+
+    recordLeftMeas();
+    recordRightMeas();
     delay(MEASURE_INTERVAL);
   }
   // deceleration loop
@@ -41,10 +40,11 @@ void stdMeasLoop()
     uint64_t currTime = uint64_t(micros()) * 1000; // gets time in nanoseconds
     readLeft = getLDistanceSensor();               // read from left sensor
     readRight = getRDistanceSensor();              // read data from right sensor
-    rightMeasurments.push_back({readRight, currTime});
-    leftMeasurments.push_back({readLeft, currTime});
+
+    recordLeftMeas();
+    recordRightMeas();
     delay(MEASURE_INTERVAL);
   }
-  Serial.println(MAX_EXPECTED_MEASURMENTS);
+  // Serial.println(MAX_EXPECTED_MEASURMENTS);
   delay(500);
 }

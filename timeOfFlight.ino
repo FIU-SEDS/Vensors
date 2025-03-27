@@ -1,5 +1,19 @@
 #include <Wire.h>
-#include "SparkFun_VL53L1X.h"
+#include <VL53L1X.h> 
+
+#define TOF_XSHUT_A 10
+#define TOF_XSHUT_B 9
+
+#define TOF_DISTANCE_MODE VL53L1X::DistanceMode::Short
+
+// Timing Budget in microseconds
+#define TOF_TIMING_BUDGET 40000
+
+// Time in MS in which the sensor will wait until, giving up on th reading
+#define TOF_TIMEOUT 500
+
+// Time in MS to wait durring the seutp proceess for the sensor to read the shutoff command
+#define TOF_SHUNT_WAIT 50
 
 /**
  * The buffer in the values in where the sensors will say that the carrige is located in the center
@@ -9,28 +23,15 @@ const int CENTER_BUFFER = 4;
 const int LEFT_SENSOR_CENTER = 90;
 const int RIGHT_SENSOR_CENTER = 110;
 
+VL53L1X sensor_A;
+VL53L1X sensor_B;
+
 /**
  * Returns the distance measured by the left sensor in mm
  */
-// create objects for right and left sensor;
-SFEVL53L1X right_sensor, left_sensor;
 int getLDistanceSensor()
 {
-  // Simulate reading from a sensor
-  // initiate measurement
-  left_sensor.startRanging();
-  while (!left_sensor.checkForDataReady())
-  {
-    delay(1);
-  }
-  // result of the measurement from the sensor
-  int distance = left_sensor.getDistance();
-  // clears any interrupts
-  left_sensor.clearInterrupt();
-  // stops measuring distance
-  left_sensor.stopRanging();
-  // returns left sensor distance
-  return distance;
+  return sensor_A.read();
 }
 
 /**
@@ -38,23 +39,7 @@ int getLDistanceSensor()
  */
 int getRDistanceSensor()
 {
-  // Simulate reading from a sensor
-  // starts measuring
-  // initiate measurement
-  right_sensor.startRanging();
-  // wait for data to be ready
-  while (!right_sensor.checkForDataReady())
-  {
-    delay(1);
-  }
-  // result of the measurement from the sensor
-  int distance = right_sensor.getDistance();
-  // clear any interrupt
-  right_sensor.clearInterrupt();
-  // stops measuring the distance
-  right_sensor.stopRanging();
-  // returns right sensor distance
-  return distance;
+  return sensor_B.read();
 }
 
 /**
@@ -63,21 +48,61 @@ int getRDistanceSensor()
  */
 int setupTimeOfFlight()
 {
-  // i2c communitcation
-  Wire.begin();
-  Serial.begin(115200);
-  // begin return 0 if the intialization is good
-  if (left_sensor.begin() != 0)
+  Wire.begin(5, 4);
+
+  //Set the pin mode to output
+  pinMode(TOF_XSHUT_A ,OUTPUT);
+  pinMode(TOF_XSHUT_B ,OUTPUT);
+  
+  //Turn all TOF's off
+  digitalWrite(TOF_XSHUT_A, LOW);
+  digitalWrite(TOF_XSHUT_B, LOW);
+
+  //-----------------------------------------------------------------
+  //FIRST WE WILL CONFIGURE AND SETUP SENSOR_A
+  //-----------------------------------------------------------------
+  delay(TOF_SHUNT_WAIT);
+  digitalWrite(TOF_XSHUT_A, HIGH); //Turn sensor_A on
+  delay(TOF_SHUNT_WAIT);
+
+  sensor_A.setTimeout(TOF_TIMEOUT); //Set the sensors timeout
+
+  if (!sensor_A.init())//try to initilise the sensor
   {
-    Serial.println("Left_sensor failed to begin.");
-    return 1;
+      //Sensor does not respond within the timeout time
+      Serial.println("Sensor_A is not responding, check your wiring");
   }
-  if (right_sensor.begin() != 0)
+  else
   {
-    Serial.println("Right sensor failed to begin.");
-    return 2;
-  }
-  Serial.println("Sensor working!");
+      sensor_A.setAddress(42); //Set the sensors I2C address
+      sensor_A.setDistanceMode(TOF_DISTANCE_MODE); //Set the sensor to maximum range of 4 meters
+      sensor_A.setMeasurementTimingBudget(TOF_TIMING_BUDGET); //Set its timing budget in microseconds longer timing budgets will give more accurate measurements
+      sensor_A.startContinuous(45); //Sets the interval where a measurement can be requested in milliseconds
+  }   
+
+    //-----------------------------------------------------------------
+    //NOW CONFIGURE AND SETUP SENSOR_B
+    //-----------------------------------------------------------------
+    delay(TOF_SHUNT_WAIT);
+    digitalWrite(TOF_XSHUT_B, HIGH); //Turn sensor_A on
+    delay(TOF_SHUNT_WAIT);
+    
+    sensor_B.setTimeout(TOF_TIMEOUT); //Set the sensors timeout
+    
+    if (!sensor_B.init())//try to initilise the sensor
+    {
+        //Sensor does not respond within the timeout time
+        Serial.println("Sensor_B is not responding, check your wiring");
+    }
+    else
+    {
+        sensor_B.setAddress(43); //Set the sensors I2C address
+        sensor_B.setDistanceMode(TOF_DISTANCE_MODE); //Set the sensor to maximum range of 4 meters
+        sensor_B.setMeasurementTimingBudget(TOF_TIMING_BUDGET); //Set its timing budget in microseconds longer timing budgets will give more accurate measurements
+        sensor_B.startContinuous(45); //Sets the interval where a measurement can be requested in milliseconds
+    } 
+  
+  Serial.println("TOF Initialized");
   return 0;
 }
 

@@ -11,23 +11,24 @@ struct measurment
   uint64_t time;
 };
 
-/** The maximum distance that the carrige can move between the top in bottom
- * portions in mm
- */
-const int MAX_TRAVEL_DISTANCE = 200;
 
 void setup()
 {
   Serial.begin(115200);
 
-  stdMeasSetup();
+  fullSetup();
+  // stdMeasSetup();
+
+  setupTest();
 }
 
 void loop()
 {
-  if (!isInApogee()) {
-    return;
-  }
+  // if (!isInApogee()) {
+  //   return;
+  // }
 
-  stdMeasLoop();
+  // stdMeasLoop();
+
+  loopTest();
 }
