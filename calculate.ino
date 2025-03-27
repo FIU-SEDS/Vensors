@@ -66,3 +66,12 @@ double averageAcceleration(const std::vector<measurment> &measurments)
     // Therefore, mm/ns² = (10^-3 m) / (10^-18 s²) = 10^15 m/s²
     return avg_second_derivative * 1e15;
 }
+
+/** Returns the the found 'a' in the equation ax^2 + bx + c which fits the line made
+ * by the measurments
+ * @see https://en.wikipedia.org/wiki/Curve_fitting
+ * Replicates the numpy.polyfit method -> https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html
+ */
+double findAccelerationFit(const std::vector<measurment> &measurments) {
+ return -1.0;
+}

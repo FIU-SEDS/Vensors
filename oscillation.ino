@@ -8,8 +8,11 @@
  */
 int oscSetup()
 {
-  return 0;
+  fullSetup();
 }
+
+bool goingLeft = true;
+bool firstOscillation = true;
 
 /**
  * Loop the oscillation algorithm
@@ -40,5 +43,28 @@ int oscSetup()
  */
 void oscLoop()
 {
-  // Implement your oscillation logic here
+
+  if (isInCenter()) {
+    goingLeft = !goingLeft;
+
+    if (!firstOscillation) {
+      calculateMass();
+    }
+
+    if (firstOscillation) {
+      firstOscillation = !firstOscillation;
+    }
+
+    return;
+  }
+
+  recordMeas();
+
+  if (goingLeft) {
+    leftFacingForce();
+  }
+  else
+  {
+    rightFacingForce();
+  }
 }

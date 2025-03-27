@@ -11,9 +11,34 @@
  * IMU
  * Measurements
  *
- * @return 0 if all the setup functions succeeded, the non-zero code from the failing function otherwise
+ * Hangs program if any of the called setup functions
+ * return a non 0 code
  */
-int fullSetup()
+void fullSetup()
 {
-  return -1;
+  int code = 0;
+
+  code = setupTimeOfFlight();
+  if (code)
+  {
+    Serial.print("Failed to setup time of flight sensor, code: ");
+    Serial.println(code);
+    while(1) {}
+  }
+
+  return;
+
+  code = setupIMU();
+  if (code) {
+    Serial.print("Failed to setup time of IMU sensor, code: ");
+    Serial.println(code);
+    while(1) {}
+  }
+
+  code = setupAccelerometer();
+  if (code) {
+    while(1) {}
+  }
+
+  setupMeasurements();
 }
