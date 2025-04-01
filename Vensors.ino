@@ -2,6 +2,8 @@
 #include "main.h"
 #include <cmath>
 
+bool prevIsInApogee = false;
+
 struct measurment
 {
   /** Distance in mm from the sensor */
@@ -24,9 +26,22 @@ void setup()
 
 void loop()
 {
-  // if (!isInApogee()) {
-  //   return;
-  // }
+  // Entering apogee
+  if (!prevIsInApogee && isInApogee()) {
+    preApogeeTimeOfFlightSetup();
+    prevIsInApogee = true;
+
+    // Exiting apogee
+  } else if (prevIsInApogee && !isInApogee()) {
+    turnOffTimeOfFlight();
+    prevIsInApogee = false;
+
+    // Not in apogee
+  } else if (!isInApogee()) {
+    return;
+  }
+
+  // Begin the measurements
 
   // stdMeasLoop();
 
