@@ -1,5 +1,5 @@
 #include <Wire.h>
-#include <VL53L1X.h> 
+#include <VL53L1X.h>
 
 #define TOF_XSHUT_A 10
 #define TOF_XSHUT_B 9
@@ -43,23 +43,29 @@ int getRDistanceSensor()
 }
 
 /**
- * Initalized the time of flight sensors and returns a 0 value if successfull.
+ * Initializes the time of flight sensors before liftoff
  * @return 0 on success, non-zero otherwise.
  */
-int setupTimeOfFlight()
-{
+int setupTimeOfFlightInitial() {
   sensor_A.setBus(&Wire1);
   sensor_B.setBus(&Wire1);
 
   //Set the pin mode to output
   pinMode(TOF_XSHUT_A ,OUTPUT);
   pinMode(TOF_XSHUT_B ,OUTPUT);
-  
-  //Turn all TOF's off
-  digitalWrite(TOF_XSHUT_A, LOW);
-  digitalWrite(TOF_XSHUT_B, LOW);
 
+  turnOffTimeOfFlight();
+
+  return 0;
+}
+
+/**
+ * Initializes the time of flight sensors durring launch
+ * @return 0 on success, non-zero otherwise.
+ */
+int preApogeeTimeOfFlightSetup() {
   //-----------------------------------------------------------------
+
   //FIRST WE WILL CONFIGURE AND SETUP SENSOR_A
   //-----------------------------------------------------------------
   delay(TOF_SHUNT_WAIT);
@@ -72,6 +78,7 @@ int setupTimeOfFlight()
   {
       //Sensor does not respond within the timeout time
       Serial.println("Sensor_A is not responding, check your wiring");
+      return -1;
   }
   else
   {
@@ -79,7 +86,7 @@ int setupTimeOfFlight()
       sensor_A.setDistanceMode(TOF_DISTANCE_MODE); //Set the sensor to maximum range of 4 meters
       sensor_A.setMeasurementTimingBudget(TOF_TIMING_BUDGET); //Set its timing budget in microseconds longer timing budgets will give more accurate measurements
       sensor_A.startContinuous(45); //Sets the interval where a measurement can be requested in milliseconds
-  }   
+  }
 
     //-----------------------------------------------------------------
     //NOW CONFIGURE AND SETUP SENSOR_B
@@ -87,13 +94,14 @@ int setupTimeOfFlight()
     delay(TOF_SHUNT_WAIT);
     digitalWrite(TOF_XSHUT_B, HIGH); //Turn sensor_A on
     delay(TOF_SHUNT_WAIT);
-    
+
     sensor_B.setTimeout(TOF_TIMEOUT); //Set the sensors timeout
-    
+
     if (!sensor_B.init())//try to initilise the sensor
     {
         //Sensor does not respond within the timeout time
         Serial.println("Sensor_B is not responding, check your wiring");
+        return 1;
     }
     else
     {
@@ -101,10 +109,20 @@ int setupTimeOfFlight()
         sensor_B.setDistanceMode(TOF_DISTANCE_MODE); //Set the sensor to maximum range of 4 meters
         sensor_B.setMeasurementTimingBudget(TOF_TIMING_BUDGET); //Set its timing budget in microseconds longer timing budgets will give more accurate measurements
         sensor_B.startContinuous(45); //Sets the interval where a measurement can be requested in milliseconds
-    } 
-  
+    }
+
   Serial.println("TOF Initialized");
   return 0;
+}
+
+void turnOffTimeOfFlight() {
+  digitalWrite(TOF_XSHUT_A, LOW);
+  digitalWrite(TOF_XSHUT_B, LOW);
+}
+
+void turnONTimeOfFlight() {
+  digitalWrite(TOF_XSHUT_A, HIGH);
+  digitalWrite(TOF_XSHUT_B, HIGH);
 }
 
 /**

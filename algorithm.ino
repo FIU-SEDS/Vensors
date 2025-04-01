@@ -29,13 +29,17 @@ void fullSetup()
 
   int code = 0;
 
-  code = setupTimeOfFlight();
+  code = setupTimeOfFlightInitial();
   if (code)
   {
     Serial.print("Failed to setup time of flight sensor, code: ");
     Serial.println(code);
     while(1) {}
   }
+
+  #ifdef DEBUG
+    preApogeeTimeOfFlightSetup();
+  #endif
 
   return;
 
