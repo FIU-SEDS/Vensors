@@ -7,7 +7,7 @@ Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(ACCELEROMETER_SENSOR_I
 
 sensors_event_t event;
 
-double updateAcc() {
+void updateAcc() {
   accel.getEvent(&event);
 }
 
@@ -53,6 +53,7 @@ int setupAccelerometer()
     return -1;
   }
 
+  accel.setDataRate(ADXL345_DATARATE_3200_HZ);
   accel.setRange(ADXL345_RANGE_16_G);
   return 0;
 }
