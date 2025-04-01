@@ -48,7 +48,8 @@ int getRDistanceSensor()
  */
 int setupTimeOfFlight()
 {
-  Wire.begin(5, 4);
+  sensor_A.setBus(&Wire1);
+  sensor_B.setBus(&Wire1);
 
   //Set the pin mode to output
   pinMode(TOF_XSHUT_A ,OUTPUT);

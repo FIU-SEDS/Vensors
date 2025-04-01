@@ -1,66 +1,71 @@
-#include <math.h> // Include the math library
+#include <Adafruit_MPU6050.h>
 
-/**
- * Returns the acceleration from the IMU in the X direction
- */
-int getIMUXAcc()
-{
-  // Simulate reading from a sensor
-  return -1;
+#define IMU_ACC_RANGE MPU6050_RANGE_8_G
+#define IMU_GYRO_RANGE MPU6050_RANGE_500_DEG
+#define IMU_REFRESH_RATE MPU6050_BAND_21_HZ
+
+
+Adafruit_MPU6050 mpu;
+sensors_event_t a, g, temp;
+
+void updateIMU() {
+  mpu.getEvent(&a, &g, &temp);
 }
 
 /**
- * Returns the acceleration from the IUM in the Y direction
+ *  Returns the acceleration from the IMU in the X direction.
  */
-int getIMUYAcc()
+double getIMUXAcc()
 {
-  // Simulate reading from a sensor
-  return -1;
+  return a.acceleration.x; // Preserve precision
 }
 
 /**
- * Returns the acceleration from the in the Z direction
+ * Returns the acceleration from the IMU in the Y direction.
  */
-int getIMUZAcc()
+double getIMUYAcc()
 {
-  // Simulate reading from a sensor
-  return -1;
+  return a.acceleration.y * 100;
 }
 
 /**
- * Returns the gyro from the IMU in the X direction
+ * Returns the acceleration from the IMU in the Z direction.
  */
-int getIMUXGyro()
+double getIMUZAcc()
 {
-  // Simulate reading from a sensor
-  return -1;
+  return a.acceleration.z;
 }
 
 /**
- * Returns the gyro from the IMU in the Y direction
+ * Returns the gyroscope value from the IMU in the X direction.
  */
-int getIMUYGyro()
+double getIMUXGyro()
 {
-  // Simulate reading from a sensor
-  return -1;
+  return g.gyro.x;
 }
 
 /**
- * Returns the gyro from the IMU in the Z direction
+ * Returns the gyroscope value from the IMU in the Y direction.
  */
-int getIMUZGyro()
+double getIMUYGyro()
 {
-  // Simulate reading from a sensor
-  return -1;
+  return g.gyro.y;
 }
 
 /**
- * Returns the temperature from the IMU in Celsius
+ * Returns the gyroscope value from the IMU in the Z direction.
  */
-int getIMUZTemp()
+double getIMUZGyro()
 {
-  // Simulate reading from a sensor
-  return -1;
+  return g.gyro.z;
+}
+
+/**
+ * Returns the temperature from the IMU in Celsius.
+ */
+double getIMUZTemp()
+{
+  return temp.temperature;
 }
 
 /**
@@ -69,6 +74,12 @@ int getIMUZTemp()
  */
 int setupIMU()
 {
+  if (!mpu.begin()) return -1;
+
+  mpu.setAccelerometerRange(IMU_ACC_RANGE);
+  mpu.setGyroRange(IMU_GYRO_RANGE);
+  mpu.setFilterBandwidth(IMU_REFRESH_RATE);
+
   return 0;
 }
 
@@ -77,7 +88,8 @@ int setupIMU()
  *
  * @return The magnitude of the acceleration vector.
  */
-float getIMUAccelerationMagnitude() {
+float getIMUAccelerationMagnitude()
+{
   int x = getIMUXAcc();
   int y = getIMUYAcc();
   int z = getIMUZAcc();
