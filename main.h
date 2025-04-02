@@ -1,9 +1,9 @@
 #ifndef DEBUG // prevent multiple inclusions.
-  #define DEBUG
+#define DEBUG
 #endif
 
-
-struct Measurement {
+struct Measurement
+{
   /** Distance in mm from the sensor */
   double distance;
 
