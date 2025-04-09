@@ -7,6 +7,23 @@ Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(ACCELEROMETER_SENSOR_I
 
 sensors_event_t event;
 
+int accXSensorIndex = 0;
+const float accXSensorData[] = {
+
+};
+
+int accYSensorIndex = 0;
+const float accYSensorData[] = {
+
+};
+int accZSensorIndex = 0;
+const float accZSensorData[] = {
+
+};
+
+
+const int accSize = sizeof(accXSensorData) / sizeof(accXSensorData[0]);
+
 void updateAcc() {
   accel.getEvent(&event);
 }
@@ -16,7 +33,8 @@ void updateAcc() {
  */
 float getXAcc()
 {
-  return event.acceleration.x;
+  // return event.acceleration.x;
+  return accXSensorData[(accXSensorIndex++) % accSize]
 }
 
 /**
@@ -24,7 +42,8 @@ float getXAcc()
  */
 float getAccY()
 {
-  return event.acceleration.y;
+  // return event.acceleration.y;
+  return accYSensorData[(accYSensorIndex++) % accSize]
 }
 
 /**
@@ -32,7 +51,8 @@ float getAccY()
  */
 float getAccZ()
 {
-  return event.acceleration.z;
+  // return event.acceleration.z;
+  return accZSensorData[(accZSensorIndex++) % accSize]
 }
 
 /**

@@ -8,6 +8,21 @@
 Adafruit_MPU6050 mpu;
 sensors_event_t a, g, temp;
 
+int imuXSensorIndex = 0;
+const float imuXSensorData[] = {
+
+};
+
+int imuYSensorIndex = 0;
+const float imuYSensorData[] = {
+
+};
+int imuZSensorIndex = 0;
+const float imuZSensorData[] = {
+
+};
+const int imuSize = sizeof(imuXSensorData) / sizeof(imuXSensorData[0]);
+
 void updateIMU() {
   mpu.getEvent(&a, &g, &temp);
 }
@@ -17,7 +32,8 @@ void updateIMU() {
  */
 double getIMUXAcc()
 {
-  return a.acceleration.x; // Preserve precision
+  // return a.acceleration.x; // Preserve precision
+  return XSensorData[(XSensorIndex++) % Size]
 }
 
 /**
@@ -25,7 +41,8 @@ double getIMUXAcc()
  */
 double getIMUYAcc()
 {
-  return a.acceleration.y * 100;
+  // return a.acceleration.y * 100;
+  return imuYSensorData[(imuYSensorIndex++) % imuSize]
 }
 
 /**
@@ -33,7 +50,8 @@ double getIMUYAcc()
  */
 double getIMUZAcc()
 {
-  return a.acceleration.z;
+  // return a.acceleration.z;
+  return imuZSensorData[(imuZSensorIndex++) % imuSize]
 }
 
 /**

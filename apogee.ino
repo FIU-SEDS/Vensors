@@ -52,5 +52,6 @@ bool isAcceloAppoge()
 
 bool isInApogee()
 {
+  delay(100);
   return isAcceloAppoge() && isIMUApogee();
 }

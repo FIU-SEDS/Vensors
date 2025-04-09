@@ -26,12 +26,25 @@ const int RIGHT_SENSOR_CENTER = 110;
 VL53L1X sensor_A;
 VL53L1X sensor_B;
 
+int LTOFSensorIndex = 0;
+const int leftTimeOfFlightSensorData[] = {
+
+};
+
+int RTOFSensorIndex = 0;
+const int rightTimeOfFlightSensorData[] = {
+
+};
+
+const int tofSize = sizeof(leftTimeOfFlightSensorData) / sizeof(leftTimeOfFlightSensorData[0]);
+
 /**
  * Returns the distance measured by the left sensor in mm
  */
 int getLDistanceSensor()
 {
-  return sensor_A.read();
+  // return sensor_A.read();
+  return leftTimeOfFlightSensorData[(LTOFSensorIndex++) % tofSize]
 }
 
 /**
@@ -39,7 +52,8 @@ int getLDistanceSensor()
  */
 int getRDistanceSensor()
 {
-  return sensor_B.read();
+  // return sensor_B.read();
+  return rightTimeOfFlightSensorData [(RTOFSensorIndex++) % tofSize]
 }
 
 /**
