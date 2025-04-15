@@ -33,7 +33,7 @@ void updateIMU() {
 double getIMUXAcc()
 {
   // return a.acceleration.x; // Preserve precision
-  return XSensorData[(XSensorIndex++) % Size]
+  return imuXSensorData[(imuXSensorIndex++) % imuSize];
 }
 
 /**
@@ -42,7 +42,7 @@ double getIMUXAcc()
 double getIMUYAcc()
 {
   // return a.acceleration.y * 100;
-  return imuYSensorData[(imuYSensorIndex++) % imuSize]
+  return imuYSensorData[(imuYSensorIndex++) % imuSize];
 }
 
 /**
@@ -51,7 +51,7 @@ double getIMUYAcc()
 double getIMUZAcc()
 {
   // return a.acceleration.z;
-  return imuZSensorData[(imuZSensorIndex++) % imuSize]
+  return imuZSensorData[(imuZSensorIndex++) % imuSize];
 }
 
 /**
@@ -92,7 +92,10 @@ double getIMUZTemp()
  */
 int setupIMU()
 {
-  if (!mpu.begin()) return -1;
+  Serial.println("Setting up IMU");
+
+  if (!mpu.begin())
+    return -1;
 
   mpu.setAccelerometerRange(IMU_ACC_RANGE);
   mpu.setGyroRange(IMU_GYRO_RANGE);

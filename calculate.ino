@@ -1,5 +1,3 @@
-#include <lib/Eigen/Dense>
-#include "Arduino.h"
 #include <vector>
 #include <numeric> // For std::accumulate
 
@@ -21,31 +19,32 @@ const int NOISE_THRESHOLD = 3;
  * @see https://en.wikipedia.org/wiki/Curve_fitting
  * Replicates the numpy.polyfit method -> https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html
  */
-double findAccelerationFit(const std::vector<measurment> &measurements) {
+double findAccelerationFit(std::vector<measurment>& measurements) {
+    int degree = 2;
     Eigen::MatrixXd A(measurements.size(), degree + 1);
     for (size_t i = 0; i < measurements.size(); ++i) {
         for (int j = 0; j <= degree; ++j) {
-            A(i, j) = pow(measurements.time, j); // Now includes x^2 term
+            A(i, j) = pow(measurements[i].time, j); // Now includes x^2 term
         }
     }
 
     // Convert y to an Eigen Vector
     Eigen::VectorXd b(measurements.size());
     for (size_t i = 0; i < measurements.size(); ++i) {
-        b(i) = measurements.distance;
+        b(i) = measurements[i].distance;
     }
 
     // Solve the Least Squares Problem (Recommended method: QR Decomposition)
     Eigen::VectorXd coefficients = A.colPivHouseholderQr().solve(b);
 
     double last_coeff = coefficients(2);
-    return last_coeff
+    return last_coeff;
 }
 
 /** Returns the average acceleration (in m/s²) over a period
  * The second derivative function above should be used
  */
-double averageAcceleration(const std::vector<measurment> &measurements)
+double averageAcceleration(std::vector<measurment>& measurements)
 {
     double second_deriv = findAccelerationFit(measurements);
 

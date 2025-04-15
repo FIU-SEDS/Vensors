@@ -32,6 +32,7 @@ std::vector<measurment> rightMeasurements;
 
 void setupMeasurements()
 {
+  Serial.println("Reserving space for measurements!");
   leftMeasurements.reserve(MAX_EXPECTED_MEASUREMENTS);
   rightMeasurements.reserve(MAX_EXPECTED_MEASUREMENTS);
 }

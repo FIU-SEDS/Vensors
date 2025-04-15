@@ -7,20 +7,16 @@
  */
 const double STARTING_IMU_THRESH = 0.20;
 
-/** Threshold for the IMU to consider the device ending apogee
- * device in apogee
- */
-const double ENDING_IMU_THRESH = -0.5;
-
 /**
  * Threshold for the IMU to consider the device starting apogee
  */
-const double STARTING_ACC_THRESH = 0.20;
+const double STARTING_ACC_THRESH = 2 * 9.8;
 
-/** Threshold for the IMU to consider the device ending apogee
- * device in apogee
+/**
+ * Time in microseconds to run the device once
+ * in apogee
  */
-const double ENDING_ACC_THRESH = -0.5;
+const uint64_t TIME_TO_RUN_DEVICE = 45e+7;
 
 /**
  * Is the IMU in apogee
@@ -32,7 +28,7 @@ bool isIMUApogee()
 {
   float totalAccMag = getIMUAccelerationMagnitude();
 
-  return totalAccMag < STARTING_IMU_THRESH && totalAccMag > ENDING_IMU_THRESH;
+  return totalAccMag > STARTING_IMU_THRESH;
 }
 
 /**
@@ -46,12 +42,33 @@ bool isAcceloAppoge()
   updateAcc();
 
   float totalAccMag = getAccelerationMagnitude();
+  Serial.println(totalAccMag);
+  Serial.println("isaccelappoge");
 
-  return totalAccMag < STARTING_ACC_THRESH && totalAccMag > ENDING_ACC_THRESH;
+  return totalAccMag <= STARTING_ACC_THRESH;
 }
 
 bool isInApogee()
 {
-  delay(100);
-  return isAcceloAppoge() && isIMUApogee();
+  static uint64_t start_time = -1;
+
+
+  // Apogee has not started
+  if (start_time == -1) {
+    delay(10);
+    if (isAcceloAppoge() && true) {
+      start_time = micros();
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if ((micros() - start_time) >= TIME_TO_RUN_DEVICE) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  return isAcceloAppoge() && true;
 }

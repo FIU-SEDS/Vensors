@@ -1,4 +1,6 @@
 // Main file code for the vertical mass measuring device
+#include <lib/Eigen/Dense>
+#include "Arduino.h"
 #include "main.h"
 #include <cmath>
 
@@ -21,6 +23,7 @@ void setup()
   fullSetup();
   // stdMeasSetup();
 
+  Serial.println("setupTest");
   setupTest();
 }
 
@@ -28,11 +31,13 @@ void loop()
 {
   // Entering apogee
   if (!prevIsInApogee && isInApogee()) {
+    Serial.println("Entering apogee");
     preApogeeTimeOfFlightSetup();
     prevIsInApogee = true;
 
     // Exiting apogee
   } else if (prevIsInApogee && !isInApogee()) {
+    Serial.println("Exiting apogee");
     turnOffTimeOfFlight();
     prevIsInApogee = false;
 
@@ -42,8 +47,10 @@ void loop()
   }
 
   // Begin the measurements
-
   // stdMeasLoop();
+  oscLoop();
 
-  loopTest();
+  // return;
+  // Serial.println("Entering loop test");
+  // loopTest();
 }

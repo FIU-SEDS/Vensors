@@ -5,11 +5,12 @@
  * measuring algorithm
  */
 
+#define SCL1 16
+#define SDA1 15
+
 #define SCL2 5
 #define SDA2 4
 
-#define SCL1 15
-#define SDA1 16
 
 /**
  * Function which calls all the setup methods for the following:
@@ -24,8 +25,10 @@
  */
 void fullSetup()
 {
+  Serial.println("Starting Setup!");
   Wire.begin(SCL1, SDA1);
   Wire1.begin(SCL2, SDA2);
+  Serial.println("Done with wires!");
 
   int code = 0;
 
@@ -40,8 +43,6 @@ void fullSetup()
   #ifdef DEBUG
     preApogeeTimeOfFlightSetup();
   #endif
-
-  return;
 
   code = setupIMU();
   if (code) {
