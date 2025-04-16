@@ -20,8 +20,10 @@
  */
 const int CENTER_BUFFER = 4;
 
-const int LEFT_SENSOR_CENTER = 90;
-const int RIGHT_SENSOR_CENTER = 110;
+const int LEFT_SENSOR_CENTER = 50;
+const int RIGHT_SENSOR_CENTER = 50;
+
+const int TOF_UNCERTAINTY = 4;
 
 VL53L1X sensor_A;
 VL53L1X sensor_B;
@@ -78,7 +80,8 @@ int setupTimeOfFlightInitial() {
  * @return 0 on success, non-zero otherwise.
  */
 int preApogeeTimeOfFlightSetup() {
-  return 0;
+  Serial.println("Starting preApogeeTimeOfFlightSetup");
+
   //-----------------------------------------------------------------
 
   //FIRST WE WILL CONFIGURE AND SETUP SENSOR_A

@@ -32,13 +32,13 @@ void loop()
   // Entering apogee
   if (!prevIsInApogee && isInApogee()) {
     Serial.println("Entering apogee");
-    preApogeeTimeOfFlightSetup();
+    // preApogeeTimeOfFlightSetup();
     prevIsInApogee = true;
 
     // Exiting apogee
   } else if (prevIsInApogee && !isInApogee()) {
     Serial.println("Exiting apogee");
-    turnOffTimeOfFlight();
+    // turnOffTimeOfFlight();
     prevIsInApogee = false;
 
     // Not in apogee
